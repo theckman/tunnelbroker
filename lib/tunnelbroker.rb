@@ -23,3 +23,4 @@
 
 require 'tunnelbroker/version'
 require 'tunnelbroker/configuration'
+require 'tunnelbroker/api_response'
