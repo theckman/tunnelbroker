@@ -22,3 +22,4 @@
 # SOFTWARE.
 
 require 'tunnelbroker/version'
+require 'tunnelbroker/configuration'
