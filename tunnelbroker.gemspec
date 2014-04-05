@@ -29,5 +29,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'coveralls', '~> 0.7.0'
   spec.add_development_dependency 'simplecov', '~> 0.8.2'
 
-  spec.add_runtime_dependency 'httparty', '~> 0.12.0'
+  spec.add_runtime_dependency 'httparty', '~> 0.13.0'
 end
