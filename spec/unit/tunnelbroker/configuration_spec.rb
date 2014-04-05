@@ -13,31 +13,15 @@ describe TunnelBroker::Configuration do
 
     context 'when called after changing values' do
       before(:each) do
-        subject.ipv4addr = nil
-        subject.passkey = ''
-        subject.userid = ''
         subject.tunnelid = ''
         subject.username = ''
-        subject.password = ''
+        subject.update_key = ''
       end
 
-      it 'should set ipv4addr to nil' do
+      it 'should set ip to nil' do
         subject.send(:set_default_values)
 
-        expect(subject.ipv4addr).to be_an_instance_of String
-        expect(subject.ipv4addr).to eql 'auto'
-      end
-
-      it 'should set passkey to nil' do
-        subject.send(:set_default_values)
-
-        expect(subject.passkey).to be_nil
-      end
-
-      it 'should set userid to nil' do
-        subject.send(:set_default_values)
-
-        expect(subject.userid).to be_nil
+        expect(subject.ip).to be_nil
       end
 
       it 'should set tunnnelid to nil' do
@@ -52,10 +36,10 @@ describe TunnelBroker::Configuration do
         expect(subject.username).to be_nil
       end
 
-      it 'should set password to nil' do
+      it 'should set update_key to nil' do
         subject.send(:set_default_values)
 
-        expect(subject.password).to be_nil
+        expect(subject.update_key).to be_nil
       end
     end
   end
@@ -75,13 +59,10 @@ describe TunnelBroker::Configuration do
       it { should be_an_instance_of TunnelBroker::Configuration }
 
       it 'should set the default configuration options' do
-        expect(subject.ipv4addr).to be_an_instance_of String
-        expect(subject.ipv4addr).to eql 'auto'
-        expect(subject.passkey).to be_nil
-        expect(subject.userid).to be_nil
+        expect(subject.ip).to be_nil
         expect(subject.tunnelid).to be_nil
         expect(subject.username).to be_nil
-        expect(subject.password).to be_nil
+        expect(subject.update_key).to be_nil
       end
     end
   end
