@@ -1,6 +1,5 @@
 # -*- coding: UTF-8 -*-
 require 'English'
-require 'tunnelbroker/exceptions'
 
 module TunnelBroker
   # class to give some helpful handling of the TunnelBroker API response
