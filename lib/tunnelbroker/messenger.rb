@@ -29,6 +29,7 @@ module TunnelBroker
       query = {
         username: @username, password: @update_key, hostname: @tunnelid
       }
+      query.merge!(myip: @ip4addr) if defined?(@ip4addr)
       self.class.get(@url, basic_auth: auth, query: query)
     end
   end
