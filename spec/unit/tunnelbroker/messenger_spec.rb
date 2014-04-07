@@ -73,19 +73,6 @@ describe TunnelBroker::Messenger do
   end
 
   describe '.call_endpoint' do
-    before do
-      allow(TunnelBroker::Messenger).to receive(:get).with(
-        'test1',
-        basic_auth: {
-          username: @opts[:username], password: @opts[:update_key]
-        },
-        query: {
-          username: @opts[:username], password: @opts[:update_key],
-          hostname: @opts[:tunnelid]
-        }
-      ).and_return('success!')
-    end
-
     context 'when given more than one arg' do
       it 'should raise ArgumentError' do
         expect do
@@ -94,10 +81,47 @@ describe TunnelBroker::Messenger do
       end
     end
 
-    context 'when called with no arguments' do
+    context 'when called with no arguments and no @ipv4addr' do
+      before do
+        allow(TunnelBroker::Messenger).to receive(:get).with(
+          'test1',
+          basic_auth: {
+            username: @opts[:username], password: @opts[:update_key]
+          },
+          query: {
+            username: @opts[:username], password: @opts[:update_key],
+            hostname: @opts[:tunnelid]
+          }
+        ).and_return('success!')
+      end
+
       subject { @messenger.send(:call_endpoint) }
 
       it { should eql 'success!' }
+    end
+
+    context 'when called with no arguments and with @ipv4addr' do
+      before do
+        @opts1 = {
+          url: 'test1', username: 'test2', update_key: 'test3',
+          tunnelid: 'test4', ip4addr: 'test5'
+        }
+        @messenger1 = TunnelBroker::Messenger.new(@opts1)
+        allow(TunnelBroker::Messenger).to receive(:get).with(
+          'test1',
+          basic_auth: {
+            username: @opts1[:username], password: @opts1[:update_key]
+          },
+          query: {
+            username: @opts1[:username], password: @opts1[:update_key],
+            hostname: @opts1[:tunnelid], myip: 'test5'
+          }
+        ).and_return('success2!')
+      end
+
+      subject { @messenger1.send(:call_endpoint) }
+
+      it { should eql 'success2!' }
     end
   end
 
