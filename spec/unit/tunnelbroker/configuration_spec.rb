@@ -13,6 +13,7 @@ describe TunnelBroker::Configuration do
 
     context 'when called after changing values' do
       before(:each) do
+        subject.ip4addr = ''
         subject.tunnelid = ''
         subject.username = ''
         subject.update_key = ''
@@ -21,7 +22,7 @@ describe TunnelBroker::Configuration do
       it 'should set ip to nil' do
         subject.send(:set_default_values)
 
-        expect(subject.ip).to be_nil
+        expect(subject.ip4addr).to be_nil
       end
 
       it 'should set tunnnelid to nil' do
@@ -59,7 +60,7 @@ describe TunnelBroker::Configuration do
       it { should be_an_instance_of TunnelBroker::Configuration }
 
       it 'should set the default configuration options' do
-        expect(subject.ip).to be_nil
+        expect(subject.ip4addr).to be_nil
         expect(subject.tunnelid).to be_nil
         expect(subject.username).to be_nil
         expect(subject.update_key).to be_nil
