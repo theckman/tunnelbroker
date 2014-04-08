@@ -100,7 +100,7 @@ describe TunnelBroker::Messenger do
       it { should eql 'success!' }
     end
 
-    context 'when called with no arguments and with @ipv4addr' do
+    context 'when called with no arguments and with non-nil @ipv4addr' do
       before do
         @opts1 = {
           url: 'test1', username: 'test2', update_key: 'test3',
@@ -122,6 +122,30 @@ describe TunnelBroker::Messenger do
       subject { @messenger1.send(:call_endpoint) }
 
       it { should eql 'success2!' }
+    end
+
+    context 'when called with no arguments and with nil @ipv4addr' do
+      before do
+        @opts2 = {
+          url: 'test1', username: 'test2', update_key: 'test3',
+          tunnelid: 'test4', ip4addr: nil
+        }
+        @messenger2 = TunnelBroker::Messenger.new(@opts2)
+        allow(TunnelBroker::Messenger).to receive(:get).with(
+          'test1',
+          basic_auth: {
+            username: @opts2[:username], password: @opts2[:update_key]
+          },
+          query: {
+            username: @opts2[:username], password: @opts2[:update_key],
+            hostname: @opts2[:tunnelid]
+          }
+        ).and_return('success3!')
+      end
+
+      subject { @messenger2.send(:call_endpoint) }
+
+      it { should eql 'success3!' }
     end
   end
 

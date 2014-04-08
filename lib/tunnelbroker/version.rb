@@ -24,5 +24,5 @@
 # The TunnelBroker API client namespace.
 #
 module TunnelBroker
-  VERSION ||= '0.0.6'
+  VERSION ||= '0.0.7'
 end
