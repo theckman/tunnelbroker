@@ -17,6 +17,7 @@ module TunnelBroker
       @username = nil
       @update_key = nil
       @tunnelid = nil
+      @url = nil
     end
   end
 end
