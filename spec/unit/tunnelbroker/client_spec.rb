@@ -244,10 +244,6 @@ describe TunnelBroker::Client do
   describe '.configure' do
     before do
       @tbc = TunnelBroker::Client.new
-      allow(@tbc).to receive(:config).and_return(MockConfig)
-      allow(TunnelBroker::Configuration).to receive(:new) do
-        'configObject'
-      end
     end
 
     context 'when given any args' do
@@ -258,13 +254,24 @@ describe TunnelBroker::Client do
       end
     end
 
-    context 'when called with no args' do
-      it 'should yield a TunnelBroker::Configuration object' do
-        expect(@tbc).to receive(:configure).and_yield('configObject')
-        @tbc.configure do |c|
-          c.upcase
-        end
+    context 'when called with a block' do
+      before do
+        allow(@tbc).to receive(:config).and_return('configObj')
       end
+
+      it 'should yield control' do
+        expect { |b| @tbc.configure(&b) }.to yield_control
+      end
+
+      it 'should yield the object returned from .config' do
+        expect { |b| @tbc.configure(&b) }.to yield_with_args('configObj')
+      end
+    end
+
+    context 'when not called with a block' do
+      subject { @tbc.configure }
+
+      it { should be_nil }
     end
   end
 end
