@@ -265,6 +265,14 @@ describe TunnelBroker::Client do
           c.upcase
         end
       end
+
+      it 'should yield the .config method' do
+        allow(@tbc).to receive(:config).and_return('hi')
+        expect(@tbc).to receive(:configure).and_yield('hi')
+        @tbc.configure do |cfg|
+          expect(cfg).to eql 'hi'
+        end
+      end
     end
 
     context 'when not called with a block' do
