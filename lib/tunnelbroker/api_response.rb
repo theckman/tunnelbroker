@@ -15,11 +15,11 @@ module TunnelBroker
       parse_response(response.lines.first)
     end
 
-    def successful?
-      if @successful.nil?
+    def success?
+      if @success.nil?
         false
       else
-        @successful
+        @success
       end
     end
 
@@ -44,19 +44,19 @@ module TunnelBroker
     end
 
     def bad_auth(match)
-      @successful = false
+      @success = false
       @changed = false
       @response = { msg: match[1], data: {} }
     end
 
     def change(match)
-      @successful = true
+      @success = true
       @changed = true
       matched_response(match)
     end
 
     def no_change(match)
-      @successful = true
+      @success = true
       @changed = false
       matched_response(match)
     end
