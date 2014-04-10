@@ -26,9 +26,7 @@ module TunnelBroker
 
     def call_endpoint
       auth = { username: @username, password: @update_key }
-      query = {
-        username: @username, password: @update_key, hostname: @tunnelid
-      }
+      query = { hostname: @tunnelid }
       query.merge!(myip: @ip4addr) unless @ip4addr.nil?
       self.class.get(@url, basic_auth: auth, query: query)
     end
