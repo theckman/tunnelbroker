@@ -4,7 +4,7 @@ module TunnelBroker
   # Configuration class for the TunnelBroker client
   #
   class Configuration
-    attr_accessor :ip4addr, :username, :update_key, :tunnelid
+    attr_accessor :ip4addr, :username, :update_key, :tunnelid, :url
 
     def initialize
       set_default_values
