@@ -107,9 +107,9 @@ describe TunnelBroker::APIResponse do
       let(:m) { TunnelBroker::APIResponse::NO_CHANGE }
       let(:thematch) { m.match('nochg 127.0.0.1') }
 
-      it 'should return true for .successful?' do
+      it 'should return true for .success?' do
         subject.send(:no_change, thematch)
-        expect(subject.successful?).to be_truthy
+        expect(subject.success?).to be_truthy
       end
 
       it 'should return false for .changed?' do
@@ -152,14 +152,14 @@ describe TunnelBroker::APIResponse do
       let(:m) { TunnelBroker::APIResponse::CHANGE }
       let(:thematch) { m.match('good 127.0.0.1') }
 
-      it 'should return true for .successful?' do
+      it 'should return true for .success?' do
         subject.send(:change, thematch)
-        expect(subject.successful?).to be_truthy
+        expect(subject.success?).to be_truthy
       end
 
       it 'should return true for .changed?' do
         subject.send(:change, thematch)
-        expect(subject.successful?).to be_truthy
+        expect(subject.success?).to be_truthy
       end
 
       it 'should return a Hash for .response' do
@@ -197,9 +197,9 @@ describe TunnelBroker::APIResponse do
       let(:m) { TunnelBroker::APIResponse::BADAUTH }
       let(:thematch) { m.match('badauth') }
 
-      it 'should return false for .successful?' do
+      it 'should return false for .success?' do
         subject.send(:bad_auth, thematch)
-        expect(subject.successful?).to be_falsey
+        expect(subject.success?).to be_falsey
       end
 
       it 'should return false for .changed?' do
@@ -342,37 +342,37 @@ describe TunnelBroker::APIResponse do
     end
   end
 
-  describe '.successful?' do
+  describe '.success?' do
     context 'when given more than one arg' do
       it 'should raise ArgumentError' do
-        expect { subject.successful?(nil) }.to raise_error ArgumentError
+        expect { subject.success?(nil) }.to raise_error ArgumentError
       end
     end
 
-    context 'when @successful is true' do
+    context 'when @success is true' do
       before do
         @t = TunnelBroker::APIResponse.new(MockResponse.new('good 127.0.0.1'))
       end
-      subject { @t.successful? }
+      subject { @t.success? }
 
       it { should be_truthy }
     end
 
-    context 'when @successful is false' do
+    context 'when @success is false' do
       before do
         @t = TunnelBroker::APIResponse.new(MockResponse.new('badauth'))
       end
-      subject { @t.successful? }
+      subject { @t.success? }
 
       it { should be_falsey }
     end
 
-    context 'when @successful is not defined' do
+    context 'when @success is not defined' do
       before do
         @t = TunnelBroker::APIResponse.new(MockResponse.new('good 127.0.0.1'))
-        @t.remove_instance_variable(:@successful)
+        @t.remove_instance_variable(:@success)
       end
-      subject { @t.successful? }
+      subject { @t.success? }
 
       it { should be_falsey }
     end
@@ -405,7 +405,7 @@ describe TunnelBroker::APIResponse do
       it { should be_an_instance_of TunnelBroker::APIResponse }
 
       it 'should call parse_response' do
-        expect(subject.successful?).to be_truthy
+        expect(subject.success?).to be_truthy
         expect(subject.changed?).to be_truthy
         expect(subject.response).to be_an_instance_of Hash
       end
