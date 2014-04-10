@@ -88,10 +88,7 @@ describe TunnelBroker::Messenger do
           basic_auth: {
             username: @opts[:username], password: @opts[:update_key]
           },
-          query: {
-            username: @opts[:username], password: @opts[:update_key],
-            hostname: @opts[:tunnelid]
-          }
+          query: { hostname: @opts[:tunnelid] }
         ).and_return('success!')
       end
 
@@ -112,10 +109,7 @@ describe TunnelBroker::Messenger do
           basic_auth: {
             username: @opts1[:username], password: @opts1[:update_key]
           },
-          query: {
-            username: @opts1[:username], password: @opts1[:update_key],
-            hostname: @opts1[:tunnelid], myip: 'test5'
-          }
+          query: { hostname: @opts1[:tunnelid], myip: 'test5' }
         ).and_return('success2!')
       end
 
@@ -136,10 +130,7 @@ describe TunnelBroker::Messenger do
           basic_auth: {
             username: @opts2[:username], password: @opts2[:update_key]
           },
-          query: {
-            username: @opts2[:username], password: @opts2[:update_key],
-            hostname: @opts2[:tunnelid]
-          }
+          query: { hostname: @opts2[:tunnelid] }
         ).and_return('success3!')
       end
 
@@ -156,10 +147,7 @@ describe TunnelBroker::Messenger do
         basic_auth: {
           username: @opts[:username], password: @opts[:update_key]
         },
-        query: {
-          username: @opts[:username], password: @opts[:update_key],
-          hostname: @opts[:tunnelid]
-        }
+        query: { hostname: @opts[:tunnelid] }
       ).and_return('more practice, more success!')
 
       allow(TunnelBroker::APIResponse).to receive(:new) do |arg1|
