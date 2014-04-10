@@ -258,12 +258,19 @@ describe TunnelBroker::Client do
       end
     end
 
-    context 'when called with no args' do
+    context 'when called with a block' do
       it 'should yield a TunnelBroker::Configuration object' do
         expect(@tbc).to receive(:configure).and_yield('configObject')
         @tbc.configure do |c|
           c.upcase
         end
+      end
+    end
+
+    context 'when not called with a block' do
+      it 'should return null' do
+        expect(@tbc).to receive(:configure).and_return(nil)
+        expect(@tbc.configure).to be_nil
       end
     end
   end
