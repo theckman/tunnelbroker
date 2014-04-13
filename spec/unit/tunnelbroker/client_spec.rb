@@ -14,7 +14,7 @@ class MockConfig
   end
 
   def self.username
-    'tim'
+    'theckman'
   end
   def self.update_key
     'abc123'
@@ -88,7 +88,6 @@ describe TunnelBroker::Client do
     before do
       @tbc = TunnelBroker::Client.new
       allow(@tbc).to receive(:config).and_return(MockConfig)
-      @base_hash = { url: TunnelBroker::Client::ENDPOINT }
     end
 
     context 'when given more than one arg' do
@@ -99,30 +98,22 @@ describe TunnelBroker::Client do
       end
     end
 
-    context 'when config.url set' do
-      before do
-        allow(MockConfig).to receive(:url).and_return('http://tb.io/')
-        allow(MockConfig).to receive(:username).and_return(nil)
-        allow(MockConfig).to receive(:update_key).and_return(nil)
-        allow(MockConfig).to receive(:tunnelid).and_return(nil)
-        allow(MockConfig).to receive(:ip4addr).and_return(nil)
+    context 'irrespective of what the config options are' do
+      it 'should try to build the config with each config item' do
+        TunnelBroker::Configuration::FIELDS.each do |c|
+          expect(@tbc).to receive(:config_hash_item).with(c).and_return({})
+        end
+        @tbc.send(:build_messenger_config)
       end
-
-      subject { @tbc.send(:build_messenger_config) }
-
-      it { should be_an_instance_of Hash }
-
-      it { should eql(url: 'http://tb.io/') }
     end
 
-    context 'when config.url is not set' do
+    context 'when none of the config options are set' do
       before do
         allow(MockConfig).to receive(:username).and_return(nil)
         allow(MockConfig).to receive(:update_key).and_return(nil)
         allow(MockConfig).to receive(:tunnelid).and_return(nil)
         allow(MockConfig).to receive(:ip4addr).and_return(nil)
       end
-
       subject { @tbc.send(:build_messenger_config) }
 
       it { should be_an_instance_of Hash }
@@ -130,67 +121,7 @@ describe TunnelBroker::Client do
       it { should eql(url: TunnelBroker::Client::ENDPOINT) }
     end
 
-    context 'when config.username is set' do
-      before do
-        @cfg = @base_hash.merge(username: MockConfig.username)
-        allow(MockConfig).to receive(:update_key).and_return(nil)
-        allow(MockConfig).to receive(:tunnelid).and_return(nil)
-        allow(MockConfig).to receive(:ip4addr).and_return(nil)
-      end
-
-      subject { @tbc.send(:build_messenger_config) }
-
-      it { should be_an_instance_of Hash }
-
-      it { should eql @cfg }
-    end
-
-    context 'when config.update_key is set' do
-      before do
-        @cfg = @base_hash.merge(update_key: MockConfig.update_key)
-        allow(MockConfig).to receive(:username).and_return(nil)
-        allow(MockConfig).to receive(:tunnelid).and_return(nil)
-        allow(MockConfig).to receive(:ip4addr).and_return(nil)
-      end
-
-      subject { @tbc.send(:build_messenger_config) }
-
-      it { should be_an_instance_of Hash }
-
-      it { should eql @cfg }
-    end
-
-    context 'when config.tunnelid is set' do
-      before do
-        @cfg = @base_hash.merge(tunnelid: MockConfig.tunnelid)
-        allow(MockConfig).to receive(:username).and_return(nil)
-        allow(MockConfig).to receive(:update_key).and_return(nil)
-        allow(MockConfig).to receive(:ip4addr).and_return(nil)
-      end
-
-      subject { @tbc.send(:build_messenger_config) }
-
-      it { should be_an_instance_of Hash }
-
-      it { should eql @cfg }
-    end
-
-    context 'when config.ip4addr is set' do
-      before do
-        @cfg = @base_hash.merge(ip4addr: MockConfig.ip4addr)
-        allow(MockConfig).to receive(:username).and_return(nil)
-        allow(MockConfig).to receive(:update_key).and_return(nil)
-        allow(MockConfig).to receive(:tunnelid).and_return(nil)
-      end
-
-      subject { @tbc.send(:build_messenger_config) }
-
-      it { should be_an_instance_of Hash }
-
-      it { should eql @cfg }
-    end
-
-    context 'when all config options are set' do
+    context 'when all of the config options are set' do
       before do
         @cfg = {
           url: TunnelBroker::Client::ENDPOINT,
@@ -206,6 +137,116 @@ describe TunnelBroker::Client do
       it { should be_an_instance_of Hash }
 
       it { should eql @cfg }
+    end
+  end
+
+  describe '.config_hash_item' do
+    before do
+      @tbc = TunnelBroker::Client.new
+      allow(@tbc).to receive(:config).and_return(MockConfig)
+    end
+
+    context 'when given more than one arg' do
+      it 'should raise ArgumentError' do
+        expect do
+          @tbc.send(:config_hash_item)
+        end.to raise_error ArgumentError
+      end
+    end
+
+    context 'when given less than one arg' do
+      it 'should raise ArgumentError' do
+        expect do
+          @tbc.send(:config_hash_item)
+        end.to raise_error ArgumentError
+      end
+    end
+
+    context 'when given a key that is not valid' do
+      before do
+        @key = :fakeitem
+      end
+
+      it 'should not be a valid key' do
+        expect(TunnelBroker::Configuration::FIELDS.include?(@key))
+          .to be_falsey
+      end
+
+      it 'should raise NoMethodError' do
+        expect do
+          @tbc.send(:config_hash_item, @key)
+        end.to raise_error NoMethodError
+      end
+    end
+
+    context 'when given a valid key that is unset' do
+      before do
+        @key = :username
+        allow(MockConfig).to receive(:username).and_return(nil)
+      end
+
+      it 'should be a valid key' do
+        expect(TunnelBroker::Configuration::FIELDS.include?(@key))
+          .to be_truthy
+      end
+
+      subject { @tbc.send(:config_hash_item, @key) }
+
+      it { should be_an_instance_of Hash }
+
+      it { should eql({}) }
+    end
+
+    context 'when given a valid key that is set' do
+      before do
+        @key = :username
+      end
+
+      it 'should be a valid key' do
+        expect(TunnelBroker::Configuration::FIELDS.include?(@key))
+          .to be_truthy
+      end
+
+      subject { @tbc.send(:config_hash_item, @key) }
+
+      it { should be_an_instance_of Hash }
+
+      it { should eql(username: 'theckman') }
+    end
+
+    context 'when given :url and it being unset' do
+      before do
+        @key = :url
+      end
+
+      it 'should be a valid key' do
+        expect(TunnelBroker::Configuration::FIELDS.include?(@key))
+          .to be_truthy
+      end
+
+      subject { @tbc.send(:config_hash_item, @key) }
+
+      it { should be_an_instance_of Hash }
+
+      it { should eql(url: TunnelBroker::Client::ENDPOINT) }
+    end
+
+    context 'when given :url and it being unset' do
+      before do
+        @key = :url
+        allow(MockConfig).to receive(:url).and_return('http://tb.io/')
+      end
+
+      it 'should be a valid key' do
+        expect(TunnelBroker::Configuration::FIELDS.include?(@key))
+          .to be_truthy
+      end
+
+      subject { @tbc.send(:config_hash_item, @key) }
+
+      it { should be_an_instance_of Hash }
+
+      it { should eql(url: 'http://tb.io/') }
     end
   end
 

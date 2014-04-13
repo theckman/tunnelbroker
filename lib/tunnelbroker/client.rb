@@ -25,14 +25,22 @@ module TunnelBroker
     end
 
     def build_messenger_config
-      url = config.url || ENDPOINT
       conf = {}
-      conf.merge!(url: url)
-      conf.merge!(username: config.username) unless config.username.nil?
-      conf.merge!(update_key: config.update_key) unless config.update_key.nil?
-      conf.merge!(tunnelid: config.tunnelid) unless config.tunnelid.nil?
-      conf.merge!(ip4addr: config.ip4addr) unless config.ip4addr.nil?
+      TunnelBroker::Configuration::FIELDS.each do |k|
+        conf.merge!(config_hash_item(k))
+      end
       conf
+    end
+
+    def config_hash_item(key)
+      c = config.send(key)
+      if c.nil? && key == :url
+        { key => ENDPOINT }
+      elsif c.nil?
+        {}
+      else
+        { key => c }
+      end
     end
   end
 end
