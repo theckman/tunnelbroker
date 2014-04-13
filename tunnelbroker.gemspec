@@ -21,13 +21,13 @@ Gem::Specification.new do |spec|
   spec.files       = %x(git ls-files).split
 
   spec.add_development_dependency 'bundler', '~> 1.5'
-  spec.add_development_dependency 'rake', '~> 10.2.2'
-  spec.add_development_dependency 'rubocop', '~> 0.20.0'
+  spec.add_development_dependency 'rake', '~> 10.2', '>= 10.2.2'
+  spec.add_development_dependency 'rubocop', '~> 0.20'
   spec.add_development_dependency 'rspec', '>= 3.0.0.beta2'
-  spec.add_development_dependency 'fuubar', '~> 1.3.2'
-  spec.add_development_dependency 'coveralls', '~> 0.7.0'
-  spec.add_development_dependency 'simplecov', '~> 0.8.2'
+  spec.add_development_dependency 'fuubar', '~> 1.3', '>= 1.3.2'
+  spec.add_development_dependency 'coveralls', '~> 0.7'
+  spec.add_development_dependency 'simplecov', '~> 0.8', '>= 0.8.2'
 
-  spec.add_runtime_dependency 'httparty', '~> 0.13.0'
+  spec.add_runtime_dependency 'httparty', '~> 0.13'
   spec.add_runtime_dependency 'awesome_print'
 end
