@@ -2,6 +2,20 @@
 require 'spec_helper'
 
 describe TunnelBroker::Configuration do
+  describe '::FIELDS' do
+    subject { TunnelBroker::Configuration::FIELDS }
+
+    it { should be_an_instance_of Array }
+
+    it 'should contain only symbols' do
+      subject.each do |f|
+        expect(f).to be_an_instance_of Symbol
+      end
+    end
+
+    it { should eql [:url, :ip4addr, :username, :update_key, :tunnelid] }
+  end
+
   describe '.set_default_values' do
     context 'when given more than one arg' do
       it 'should raise ArgumentError' do
