@@ -6,7 +6,7 @@ $LOAD_PATH.unshift File.expand_path('../lib', __FILE__)
 require 'tunnelbroker/version'
 
 Gem::Specification.new do |spec|
-  spec.name        = 'lita-forecast'
+  spec.name        = 'tunnelbroker'
   spec.version     = TunnelBroker::VERSION
   spec.date        = Time.now.strftime('%Y-%m-%d')
   spec.description = 'Hurricane Electric IPv6 TunnelBroker API client'
@@ -29,5 +29,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'simplecov', '~> 0.8', '>= 0.8.2'
 
   spec.add_runtime_dependency 'httparty', '~> 0.13'
-  spec.add_runtime_dependency 'awesome_print'
 end
