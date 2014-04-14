@@ -18,11 +18,11 @@ module TunnelBroker
       tb.call_api
     end
 
-    private
-
     def config
       @config ||= TunnelBroker::Configuration.new
     end
+
+    private
 
     def build_messenger_config
       conf = {}
