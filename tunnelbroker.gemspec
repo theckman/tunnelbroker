@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
   spec.email       = 'tim@timheckman.net'
   spec.homepage    = 'https://github.com/theckman/tunnelbroker'
   spec.license     = 'MIT'
-  spec.required_ruby_version = '>= 2.0.0'
+  spec.required_ruby_version = '>= 1.9.3'
 
   spec.test_files  = %x(git ls-files spec/*).split
   spec.files       = %x(git ls-files).split
